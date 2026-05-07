@@ -1,0 +1,13 @@
+node_modules
+/public/serverimages/*.jpg
+/public/serverimages/*.png
+/public/serverimages/*.jpeg
+/public/serverimages/*.gif
+/public/serverimages/*.webp
+/public/serverimages/*.svg
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+src/config/serviceAccountKey*.json

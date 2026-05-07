@@ -1,0 +1,106 @@
+<html>
+    <head>
+    <meta charset="utf-8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- add to homescreen for ios -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script>
+      function close(){
+          const messageObj = {close: true};
+          const stringifiedMessageObj = JSON.stringify(messageObj);
+        if (window.webkit && window.webkit.messageHandlers) {
+              window.webkit.messageHandlers.cordova_iab.postMessage(stringifiedMessageObj);
+            }
+      }
+    </script> 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>    
+  </head>
+  <%- include('./../style/common.ejs'); %>
+  <body class="checkoutbg">
+      <div class="fullwidth">
+        <div class="topBG"></div>
+        <div class="center header1 bold bgTopDownpadding1">Kindly confirm your details</div>
+        <div class="bgTopDownpadding1 center">
+             <div class=" header4 grey">To Pay</div>
+             <div class=" header2 bold bgsidepadding3">&#8377; <%= amount %></div>
+        </div>
+        <table class="details">
+            <tr class="header4">
+                <td class="inline-flex grey rowIcon order">Items:</td>
+            </tr>
+            <tr class="header4">                
+                <td class="bgBottompadding" colspan="2">
+                    <% itemList.forEach(function(item){ %>
+                    <div class="itemPadding"> 
+                        <div class="listdot"></div>
+                        <span class="item"><%= item.itemName %></span>
+                        <span class="qty">QTY: <%= item.count %></span>
+                    </div>
+                    <% }) %>
+                    <% addOns.forEach(function(addon){ %>
+                    <div class="itemPadding">
+                        <div class="listdot"></div>
+                        <span class="item"><%= addon.addOnName %></span>
+                        <span class="qty">QTY: <%= addon.count %></span>
+                    </div>
+                    <% }) %>
+                </td>
+            </tr>
+            <tr class="header4">
+                <td class="bgTopDownpadding2 firstcolwidth grey rowIcon name">Name:</td>
+                <td class="bgTopDownpadding2"><%= firstname %></td>
+            </tr>
+            <tr class="header4">
+                <td class="bgTopDownpadding2 grey rowIcon email">Email:</td>
+                <td class="bgTopDownpadding2"><%= email %></td>
+            </tr>       
+            <tr class="header4">
+                <td class="bgTopDownpadding2 grey rowIcon phone">Phone:</td>
+                <td class="bgTopDownpadding2"><%= phone %></td>
+            </tr>        
+            <tr class="header4">
+                <td class="inline-flex grey rowIcon address">Address:</td>
+                <td class="bgBottompadding"><%= address %></td>
+            </tr>            
+        </table>
+        <div class="center bgTopDownpadding5">
+            <button class="btn btn1" id="rzp-button1" onclick="window.open()">PAY NOW</button>
+        </div>
+        <div class="center bgTopDownpadding1 grey bold header3">OR</div>
+        <div class="center bgTopDownpadding5">
+            <button class="btn btn2" onclick="window.close()">CANCEL</button>
+        </div>
+    </body>
+    <script>
+        var options = {
+            "key": "<%= key %>", // Enter the Key ID generated from the Dashboard
+            "amount": "<%= amount_due %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "Mealawe",
+            "description": "Payment Transaction",
+            "image": "<%= serverurl %>/public/images/logo.jpg",
+            "order_id": "<%= order_id %>", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "callback_url": "<%= serverurl %>/transaction/paymentcallback/<%= transactionIdentifier %>",
+            "prefill": {
+                "name": "<%= firstname %>",
+                "email": "<%= email %>",
+                "contact": "<%= phone %>"
+            },
+            "notes": {
+                "address": "<%= address %>"
+            },
+            "theme": {
+                "color": "#e62841"
+            }
+        };
+        var rzp1 = new Razorpay(options);       
+        function open(){
+            rzp1.open();
+            e.preventDefault();
+        }
+        </script> 
+    </html>
