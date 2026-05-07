@@ -1,0 +1,3 @@
+@echo off
+echo Starting SSH tunnel to DocumentDB...
+ssh -i "D:\Pratap\workspace\MealaweServerApp\documentDBProdKeyPair.pem" -L 27017:mealaweproddocumentdb.chjhssguw1ao.ap-south-1.docdb.amazonaws.com:27017 ec2-user@3.108.58.208 -N
